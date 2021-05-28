@@ -1,8 +1,10 @@
 def call(Map config) {
-    node {
-        sh "echo ${config.password} | base64 -d | docker login -u ${config.username}  --password-stdin ${config.repo}"
+    script {
         sh """
-        docker build -f ${config.dockerfile -t ${config.tag}  ${config.context}
+        set +x
+        echo ${config.password} | base64 -d | docker login -u ${config.username}  --password-stdin ${config.repo} >/dev/null 2>&1
+        set -x
+        docker build -f ${config.dockerfile} -t ${config.tag}  ${config.context}
         docker push ${config.tag}
         """
     }
