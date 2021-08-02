@@ -1,6 +1,6 @@
 def info(message) {
     script {
-        sh  "echo ${message}"
+        sh  "echo "INFO: ${message}""
     }
 }
 
