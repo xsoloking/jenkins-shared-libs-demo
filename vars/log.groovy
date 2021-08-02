@@ -1,5 +1,7 @@
 def info(message) {
-    echo "INFO: ${message}"
+    script {
+        sh  "echo "INFO: ${message}""
+    }
 }
 
 def warning(message) {
