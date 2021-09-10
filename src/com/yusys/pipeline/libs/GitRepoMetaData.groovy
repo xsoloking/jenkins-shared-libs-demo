@@ -1,4 +1,4 @@
-package com.yusys.libs
+package com.yusys.pipeline.libs
 
 import groovy.json.JsonBuilder
 
