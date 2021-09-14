@@ -7,31 +7,23 @@ class Handler implements Serializable {
 
   def sendStartMsg() {
     def data = new StartData(steps.params.flowId,
-                           steps.params.flowInstanceId,
-                           steps.params.taskInstanceId,
-                           steps.env.JOB_NAME,
-                           steps.env.BUILD_ID,
-                           steps.env.BUILD_URL)
-    msgPublisher(data.toString(), Constants.RABBITMQ_EXCHANGE, Constants.RABBITMQ_START_ROUTING_KEY)
+                             steps.params.flowInstanceId,
+                             steps.params.taskInstanceId,
+                             steps.env.JOB_NAME,
+                             steps.env.BUILD_ID,
+                             steps.env.BUILD_URL)
+    msgPublisher(data.toString(), Constants.RABBITMQ_EXCHANGE, Constants.RABBITMQ_START_ROUTING_KEY_DEV)
   }
 
-  def sendEndMsg() {
-    def commitId = steps.sh(script: 'git show -s --format=%H HEAD', returnStdout: true).trim()
-    def commitDate = steps.sh(script: 'git show -s --format=%ci HEAD', returnStdout: true).trim()
-    def commitSubject = steps.sh(script: 'git show -s --format=%s HEAD', returnStdout: true).trim()
-    def commitAuthor = steps.sh(script: 'git show -s --format="%an <%ae>" HEAD', returnStdout: true).trim()
+  def sendEndMsg(extraData = []) {
     def data = new EndData(steps.params.flowId,
                            steps.params.flowInstanceId,
                            steps.params.taskInstanceId,
                            steps.env.JOB_NAME,
                            steps.env.BUILD_ID,
                            steps.currentBuild.currentResult)
-    data.addExtraData(new GitRepoMetaData(
-                            commitId,
-                            commitSubject,
-                            commitDate,
-                            commitAuthor).convertToList())
-    msgPublisher(data.toString(), Constants.RABBITMQ_EXCHANGE, Constants.RABBITMQ_END_ROUTING_KEY)
+    data.addExtraData(extraData)
+    msgPublisher(data.toString(), Constants.RABBITMQ_EXCHANGE, Constants.RABBITMQ_END_ROUTING_KEY_DEV)
 
   }
 

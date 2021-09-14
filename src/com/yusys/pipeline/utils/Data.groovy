@@ -8,15 +8,15 @@ class Data {
     def flowInstanceId
     def taskInstanceId
     def taskName
-    def jenkinsJobBuildId
+    def taskJobBuildId
     def status
 
-    Data(flowId, flowInstanceId, taskInstanceId, taskName, jenkinsJobBuildId, status) {
+    Data(flowId, flowInstanceId, taskInstanceId, taskName, taskJobBuildId, status) {
         this.flowId = flowId
         this.flowInstanceId = flowInstanceId
         this.taskInstanceId = taskInstanceId
         this.taskName = taskName
-        this.jenkinsJobBuildId = jenkinsJobBuildId
+        this.taskJobBuildId = taskJobBuildId
         this.status = status
     }
 
@@ -26,7 +26,7 @@ class Data {
         return new JsonBuilder(["flowId": flowId,
                 "flowInstanceId": flowInstanceId,
                 "taskInstanceId": taskInstanceId,
-                "jenkinsJobBuildId": jenkinsJobBuildId,
+                "taskJobBuildId": taskJobBuildId,
                 "taskName": taskName,
                 "status": status]).toString()
     }

@@ -6,8 +6,8 @@ class StartData extends Data {
 
     def buildUrl
 
-    StartData(flowId, flowInstanceId, taskInstanceId, taskName, jenkinsJobBuildId, buildUrl) {
-        super(flowId, flowInstanceId, taskInstanceId, taskName, jenkinsJobBuildId, "started")
+    StartData(flowId, flowInstanceId, taskInstanceId, taskName, taskJobBuildId, buildUrl) {
+        super(flowId, flowInstanceId, taskInstanceId, taskName, taskJobBuildId, "started")
         this.buildUrl = buildUrl
     }
 
@@ -18,7 +18,7 @@ class StartData extends Data {
                 "flowInstanceId": flowInstanceId,
                 "taskInstanceId": taskInstanceId,
                 "taskName": taskName,
-                "jenkinsJobBuildId": jenkinsJobBuildId,
+                "taskJobBuildId": taskJobBuildId,
                 "status": status,
                 "buildUrl": buildUrl]).toString()
     }

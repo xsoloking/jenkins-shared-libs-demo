@@ -18,7 +18,7 @@ class EndData extends Data {
                 "flowInstanceId": flowInstanceId,
                 "taskInstanceId": taskInstanceId,
                 "taskName": taskName,
-                "jenkinsJobBuildId": jenkinsJobBuildId,
+                "taskJobBuildId": taskJobBuildId,
                 "status": status,
                 "extraData": extraData]).toString()
     }
