@@ -6,7 +6,7 @@ class Handler implements Serializable {
 
   Handler(steps) {this.steps = steps}
 
-  def rabbitMQPublisher(data, exchange, routingKey) {
+  def msgPublisher(data, exchange, routingKey) {
     steps.rabbitMQPublisher conversion: false, data: data, exchange: exchange, rabbitName: 'rabbitmq', routingKey: routingKey
   }
 
@@ -18,7 +18,7 @@ class Handler implements Serializable {
                            steps.env.JOB_NAME,
                            steps.env.BUILD_ID,
                            steps.env.BUILD_URL)
-    rabbitMQPublisher(data.toString(), Constants.RABBITMQ_EXCHANGE, Constants.RABBITMQ_START_ROUTING_KEY)
+    msgPublisher(data.toString(), Constants.RABBITMQ_EXCHANGE, Constants.RABBITMQ_START_ROUTING_KEY)
   }
 
   def sendEndMsg() {
@@ -33,5 +33,5 @@ class Handler implements Serializable {
                            steps.env.BUILD_ID,
                            steps.currentBuild.currentResult)
     data.addExtraData(new GitRepoMetaData(commitId, commitSubject, commitDate,  commitAuthor).convertToList())
-    rabbitMQPublisher(data.toString(), Constants.RABBITMQ_EXCHANGE, Constants.RABBITMQ_END_ROUTING_KEY)
+    msgPublisher(data.toString(), Constants.RABBITMQ_EXCHANGE, Constants.RABBITMQ_END_ROUTING_KEY)
 }
