@@ -3,14 +3,8 @@ package com.yusys.pipeline.utils
 class Handler implements Serializable {
 
   def steps
-
   Handler(steps) {this.steps = steps}
 
-  def msgPublisher(data, exchange, routingKey) {
-    steps.rabbitMQPublisher conversion: false, data: data, exchange: exchange, rabbitName: 'rabbitmq', routingKey: routingKey
-  }
-
-  }
   def sendStartMsg() {
     def data = new StartData(steps.params.flowId,
                            steps.params.flowInstanceId,
@@ -32,6 +26,16 @@ class Handler implements Serializable {
                            steps.env.JOB_NAME,
                            steps.env.BUILD_ID,
                            steps.currentBuild.currentResult)
-    data.addExtraData(new GitRepoMetaData(commitId, commitSubject, commitDate,  commitAuthor).convertToList())
+    data.addExtraData(new GitRepoMetaData(
+                            commitId,
+                            commitSubject,
+                            commitDate,
+                            commitAuthor).convertToList())
     msgPublisher(data.toString(), Constants.RABBITMQ_EXCHANGE, Constants.RABBITMQ_END_ROUTING_KEY)
+
+  }
+
+  def msgPublisher(data, exchange, routingKey) {
+    steps.rabbitMQPublisher conversion: false, data: data, exchange: exchange, rabbitName: 'rabbitmq', routingKey: routingKey
+  }
 }
