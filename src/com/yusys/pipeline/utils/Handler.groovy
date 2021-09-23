@@ -38,16 +38,16 @@ class Handler implements Serializable {
     def dockerBuildDataList = new JsonSlurperClassic().parseText(new String(encryptedJsonString.decodeBase64()))
     for(data in dockerBuildDataList) {
       def tags = data.tags.join(" -t ")
-      def script = """
+      steps.sh """
           set +x
-          echo ${data.password} | docker login -u ${data.username}  --password-stdin ${data.repository} >/dev/null 2>&1
+          echo ${data.password} | base64 -d | docker login -u ${data.username}  --password-stdin ${data.repository} >/dev/null 2>&1
           set -x
           docker build -f ${data.dockerfile} -t ${tags} ${data.content}
           """
-      steps.sh script
-      script = "docker push ${tags}"
       if (data.repository?.trim() && data.repository != "null") {
-        steps.sh script
+        for(tag in data.tags) {
+            steps.sh "docker push ${tag}"
+        }
       }
     }
   }
