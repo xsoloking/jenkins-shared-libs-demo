@@ -30,4 +30,20 @@ class Handler implements Serializable {
   def msgPublisher(data, exchange, routingKey) {
     steps.rabbitMQPublisher conversion: false, data: data, exchange: exchange, rabbitName: 'rabbitmq', routingKey: routingKey
   }
+
+  def dockerBuild(encryptedJsonString) {
+    def dockerBuildDataList = new JsonSlurper().parseText(new String(encryptedJsonString.decodeBase64()));
+    for(data： dockerBuildDataList) {
+      def tags = data.tags.join(" -t ")
+      steps.sh """
+          set +x
+          echo ${data.password} | base64 -d | docker login -u ${data.username}  --password-stdin ${data.repo} >/dev/null 2>&1
+          set -x
+          docker build -f ${data.dockerfile} -t ${tags} ${data.context}
+      """
+      if (data.repository?.trim() && data.repository != "null") {
+        steps.sh "docker push ${tags}"
+      }
+    }
+  }
 }

@@ -1,6 +1,6 @@
 package com.yusys.pipeline.utils
 
-class DockerBuildImgData {
+class DockerBuildData {
 
     def content;
     def dockerfile;
@@ -9,7 +9,7 @@ class DockerBuildImgData {
     def password;
     def tags=[];
 
-    DockerBuildImgData(content, dockerfile, repository, username, password, tags){
+    DockerBuildData(content, dockerfile, repository, username, password, tags){
         this.content = content
         this.dockerfile = dockerfile
         this.repository = repository
