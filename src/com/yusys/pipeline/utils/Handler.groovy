@@ -47,7 +47,8 @@ class Handler implements Serializable {
       steps.sh script
       script = "docker push ${tags}"
       if (data.repository?.trim() && data.repository != "null") {
-      steps.sh script
+        steps.sh script
+      }
     }
   }
 }
