@@ -1,6 +1,6 @@
 package com.yusys.pipeline.utils
 
-import groovy.json.JsonSlurper
+import groovy.json.JsonSlurperClassic
 import groovy.json.JsonBuilder
 
 class Handler implements Serializable {
@@ -34,30 +34,20 @@ class Handler implements Serializable {
     steps.rabbitMQPublisher conversion: false, data: data, exchange: exchange, rabbitName: 'rabbitmq', routingKey: routingKey
   }
 
-  def getInsecureRegistry(encryptedJsonString) {
-    def args = []
-    def dockerBuildDataList = new JsonSlurper().parseText(new String(encryptedJsonString.decodeBase64()))
-    for(data： dockerBuildDataList) {
-      if (data.repository?.trim() && data.repository.startsWith("http:")) {
-          args.add("--insecure-registry=" + data.repository.split("//")[1])
-      }
-    }
-    return new JsonBuilder(args).toString();
-  }
-
   def dockerBuild(encryptedJsonString) {
-    def dockerBuildDataList = new JsonSlurper().parseText(new String(encryptedJsonString.decodeBase64()))
-    for(data： dockerBuildDataList) {
+    def dockerBuildDataList = new JsonSlurperClassic().parseText(new String(encryptedJsonString.decodeBase64()))
+    for(data in dockerBuildDataList) {
       def tags = data.tags.join(" -t ")
-      steps.sh """
+      def script = """
           set +x
-          echo ${data.password} | base64 -d | docker login -u ${data.username}  --password-stdin ${data.repo} >/dev/null 2>&1
+          echo ${data.password} | docker login -u ${data.username}  --password-stdin ${data.repository} >/dev/null 2>&1
           set -x
-          docker build -f ${data.dockerfile} -t ${tags} ${data.context}
-      """
+          docker build -f ${data.dockerfile} -t ${tags} ${data.content}
+          """
+      steps.sh script
+      script = "docker push ${tags}"
       if (data.repository?.trim() && data.repository != "null") {
-        steps.sh "docker push ${tags}"
-      }
+      steps.sh script
     }
   }
 }
