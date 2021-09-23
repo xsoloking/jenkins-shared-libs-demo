@@ -1,6 +1,7 @@
 package com.yusys.pipeline.utils
 
 import groovy.json.JsonSlurper
+import groovy.json.JsonBuilder
 
 class Handler implements Serializable {
 
@@ -33,8 +34,19 @@ class Handler implements Serializable {
     steps.rabbitMQPublisher conversion: false, data: data, exchange: exchange, rabbitName: 'rabbitmq', routingKey: routingKey
   }
 
+  def getInsecureRegistry(encryptedJsonString) {
+    def args = []
+    def dockerBuildDataList = new JsonSlurper().parseText(new String(encryptedJsonString.decodeBase64()))
+    for(data： dockerBuildDataList) {
+      if (data.repository?.trim() && data.repository.startsWith("http:")) {
+          args.add("--insecure-registry=" + data.repository.split("//")[1])
+      }
+    }
+    return new JsonBuilder(args).toString();
+  }
+
   def dockerBuild(encryptedJsonString) {
-    def dockerBuildDataList = new JsonSlurper().parseText(new String(encryptedJsonString.decodeBase64()));
+    def dockerBuildDataList = new JsonSlurper().parseText(new String(encryptedJsonString.decodeBase64()))
     for(data： dockerBuildDataList) {
       def tags = data.tags.join(" -t ")
       steps.sh """
