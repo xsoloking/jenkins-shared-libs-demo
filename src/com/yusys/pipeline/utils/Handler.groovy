@@ -1,5 +1,7 @@
 package com.yusys.pipeline.utils
 
+import groovy.json.JsonSlurper
+
 class Handler implements Serializable {
 
   def steps
