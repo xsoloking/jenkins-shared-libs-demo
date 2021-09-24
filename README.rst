@@ -18,3 +18,14 @@ Fill in git url, check "Load Implicitly" (if not check, you need to manually dec
 **What is Jenkins Shared Library?**
 
 You may already very familiar with Jenkins pipeline scripts. Actually those ``node {}``, ``stages("...") {}``, ``steps { ... }``, ``script{ ... }``, ``withCredential() { ... }`` syntax are simply shared library implemented in community plugins. Those declaritive are predefined in a groovy script like ``node|stages|steps|script|withCredential.groovy``, and you will see available parameters in plugin source code. 
+
+
+@Grab('org.jsoup:jsoup:1.14.2')
+doc = org.jsoup.Jsoup.connect("http://192.168.48.13:31888/test/site/surefire-report.html").get()
+table = doc.select("table[class=bodyTable]").first();
+tra = table.select("tr[class=a]").select("th").iterator()
+trb = table.select("tr[class=b]").select("th").iterator()
+println("Value 1: " + tra.next().text())
+println("Value 2: " + tra.next().text())
+println("Value 3: " + tra.next().text())
+println("Value 3: " + tra.next().text())
