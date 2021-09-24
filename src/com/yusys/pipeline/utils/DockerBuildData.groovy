@@ -2,15 +2,15 @@ package com.yusys.pipeline.utils
 
 class DockerBuildData {
 
-    def content;
+    def context;
     def dockerfile;
     def repository;
     def username;
     def password;
     def tags=[];
 
-    DockerBuildData(content, dockerfile, repository, username, password, tags){
-        this.content = content
+    DockerBuildData(context, dockerfile, repository, username, password, tags){
+        this.context = context
         this.dockerfile = dockerfile
         this.repository = repository
         this.username = username
