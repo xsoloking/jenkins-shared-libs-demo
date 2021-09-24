@@ -18,7 +18,7 @@ class Generic implements Serializable {
 
   def getJunitResults(url) {
     @Grab('org.jsoup:jsoup:1.14.2')
-    doc = org.jsoup.Jsoup.connect("http://192.168.48.13:31888/test/site/surefire-report.html").get()
+    doc = org.jsoup.Jsoup.connect(url).get()
     table = doc.select("table[class=bodyTable]").first();
     tra = table.select("tr[class=a]").select("th").iterator()
     trb = table.select("tr[class=b]").select("th").iterator()
