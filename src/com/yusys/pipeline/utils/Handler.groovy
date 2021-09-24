@@ -42,7 +42,7 @@ class Handler implements Serializable {
           set +x
           echo ${data.password} | base64 -d | docker login -u ${data.username}  --password-stdin ${data.repository} >/dev/null 2>&1
           set -x
-          docker build -f ${data.dockerfile} -t ${tags} ${data.content}
+          docker build -f ${data.dockerfile} -t ${tags} ${data.context}
           """
       if (data.repository?.trim() && data.repository != "null") {
         for(tag in data.tags) {
