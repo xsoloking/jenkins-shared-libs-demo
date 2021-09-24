@@ -18,11 +18,15 @@ class Generic implements Serializable {
 
   def getJunitResults(url) {
     @Grab('org.jsoup:jsoup:1.14.2')
+    def results = [:]    
     def doc = org.jsoup.Jsoup.connect(url).get()
     def table = doc.select("table[class=bodyTable]").first();
-    def tra = table.select("tr[class=a]").select("th").iterator()
-    def trb = table.select("tr[class=b]").select("th").iterator()
-    return tra.next().text()
+    def title = table.select("tr[class=a]").select("th").iterator()
+    def row = table.select("tr[class=b]").select("td").iterator()
+    while (title.hasNext()) {
+        results.put(title.next().text(), row.next().text())
+    }
+    return  results
   }
 
 }
