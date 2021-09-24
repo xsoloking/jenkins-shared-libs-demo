@@ -16,7 +16,7 @@ class Generic implements Serializable {
     return new JsonBuilder(args).toString();
   }
 
-  def getInsecureRegistries(url) {
+  def getJunitResults(url) {
     @Grab('org.jsoup:jsoup:1.14.2')
     doc = org.jsoup.Jsoup.connect("http://192.168.48.13:31888/test/site/surefire-report.html").get()
     table = doc.select("table[class=bodyTable]").first();
