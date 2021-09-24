@@ -13,7 +13,7 @@ class Generic implements Serializable {
           args.add("--insecure-registry=" + data.repository.split("//")[1])
       }
     }
-    return new JsonBuilder(args).toString();
+    return new JsonBuilder(args).toString()
   }
 
   def getJunitResults(url) {
@@ -26,7 +26,7 @@ class Generic implements Serializable {
     while (title.hasNext()) {
         results.put(title.next().text(), row.next().text())
     }
-    return  results
+    return new JsonBuilder(results).toString()
   }
 
 }
